@@ -1,0 +1,19 @@
+FROM alpine:3.13
+ENV PKENV_ARCH=arm
+# hadolint ignore=SC2016
+RUN apk update && \ 
+	apk add --no-cache \ 
+		ca-certificates=20191127-r5 \ 
+		bash=5.1.0-r0 \
+		git \
+		curl \
+		&& \
+	git clone https://github.com/iamhsa/pkenv.git ~/.pkenv && \
+	echo 'PATH=${HOME}/.pkenv/bin:${PATH}' >> ~/.bashrc && \
+	apk del git\
+		&& \
+	rm -rf /var/cache/apk/*
+
+WORKDIR /root
+
+ENTRYPOINT ["/bin/bash"]
